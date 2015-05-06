@@ -3,7 +3,7 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 
 ## Planned Algorithms: ##
 
-###General Algorithms###
+####General Algorithms####
 * QuickSort (C++ & Fortran)
 * RadixSort (C++ & Fortran)
 * MergeSort (C++ & Fortran)
@@ -15,7 +15,7 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * Prime Number Generator (C++ & Fortran)
 * Factoring Algorithm (C++ & Fortran)
 
-###Puzzles and Projects###
+####Puzzles and Projects####
 * N-Queens Problem (Matlab)
 * Sudoku Puzzle Game (Matlab)
 * Generic Sudoku Puzzle Solver (Matlab)
@@ -27,7 +27,7 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * Chess Game With Rules (C++ or Python)
 * Chess AI (C++ or Fortran)
 
-###Research Area/AI/Machine Learning###
+####Research Area/AI/Machine Learning####
 * Simple GA (Matlab)
 * Parallel GA (Matlab)
 * Multi-Species GA (Matlab)
