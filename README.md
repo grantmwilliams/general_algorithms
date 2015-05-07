@@ -30,6 +30,7 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * Chess AI (C++ or Fortran)
 
 ####Research Area/AI/Machine Learning####
+* Website With Research Blog
 * ~~Simple GA (Matlab)~~
 * Parallel GA (Matlab)
 * ~~Multi-Species GA (Matlab)~~
