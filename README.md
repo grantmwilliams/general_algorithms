@@ -7,12 +7,14 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * QuickSort (C++ & Fortran)
 * RadixSort (C++ & Fortran)
 * MergeSort (C++ & Fortran)
-* BubbleSort (C++ & Fortran)
+* ~~BubbleSort (C++ & Fortran)~~
 * InsertionSort (C++ & Fortran)
 * SelectionSort (C++ % Fortran)
 * Factorial Function (Fortran maybe C++)
 * Fast Fourier Transform (C++ & Fortran)
-* Prime Number Generator (C++ & Fortran)
+* ~~Simple Prime Number Generator (C++ & Fortran)~~
+* Segmented Prime Number Generator (C++)
+* Parallel Segmented Prime Number Generator (C++)
 * Factoring Algorithm (C++ & Fortran)
 
 ####Puzzles and Projects####
@@ -28,10 +30,10 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * Chess AI (C++ or Fortran)
 
 ####Research Area/AI/Machine Learning####
-* Simple GA (Matlab)
+* ~~Simple GA (Matlab)~~
 * Parallel GA (Matlab)
-* Multi-Species GA (Matlab)
-* LeapFrog Algorithm (Matlab)
+* ~~Multi-Species GA (Matlab)~~
+* ~~LeapFrog Algorithm (Matlab)~~
 * Hybrid LeapFrog-GA Algorithm (Matlab)
 * Port MSGA for Speed (Fortran/C++)
 * Port Hybrid GA for Speed (Fortran/C++)
