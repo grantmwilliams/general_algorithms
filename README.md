@@ -8,10 +8,10 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * RadixSort (C++ & Fortran)
 * MergeSort (C++ & Fortran)
 * BubbleSort (C++ & Fortran)
-* InsertaionSort (C++ & Fortran)
+* InsertionSort (C++ & Fortran)
 * SelectionSort (C++ % Fortran)
 * Factorial Function (Fortran maybe C++)
-* Fast Forrier Transform (C++ & Fortran)
+* Fast Fourier Transform (C++ & Fortran)
 * Prime Number Generator (C++ & Fortran)
 * Factoring Algorithm (C++ & Fortran)
 
@@ -22,7 +22,7 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * Sudoku Imaging Function (capable of using images or a webcam to import Sudoku puzzles) (Matlab)
 * DLX Sudoku Algorithm (Matlab)
 * Port Imaging Function for IOS (Swift)
-* Port DLX Sudoku ALgorithm for IOS (Swift)
+* Port DLX Sudoku Algorithm for IOS (Swift)
 * Build Sudoku Interface for IOS App (Swift)
 * Chess Game With Rules (C++ or Python)
 * Chess AI (C++ or Fortran)
@@ -36,3 +36,4 @@ Algorithms implemented in C++ and Fortran for sorting, numerical calculations, o
 * Port MSGA for Speed (Fortran/C++)
 * Port Hybrid GA for Speed (Fortran/C++)
 * Monte Carlo Techniques (Matlab & C++ & Fortran & CUDA)
+
