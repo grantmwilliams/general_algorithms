@@ -21,9 +21,14 @@ vector<int> bubblesort(vector<int> a){
 }
 
 int main () {
-    vector<int> a,sorted;
-    a = {4, 65, 2, -31, 0, 99, 2, 83, 782, 1};
+/*    vector<int> sorted;
+    int arr[] = {4, 65, 2, -31, 0, 99, 2, 83, 782, 1};
     
+    vector<int> a (arr, arr + sizeof(arr)/ sizeof(arr[0]) );
+ */ 
+
+    vector<int> sorted;
+    vector<int> a = {4,65,2,-31,0.99,2,83,782,1};  
     sorted = bubblesort(a);
     
     for (int i = 0; i<a.size()-1; i++){
