@@ -1,4 +1,4 @@
-program bubble
+program quick
 implicit none
 real :: start,finish
 real, dimension(10) :: array
@@ -11,12 +11,12 @@ call bubble_sort(array)
 print *, int(array)
 call cpu_time(finish)
 
-
+! Test Comment Here
 print'("Elapsed: ", F9.6, " seconds")', finish-start
 
 contains
 
-subroutine bubble_sort(a)
+subroutine quick_sort(a)
 implicit none
 real, intent(inout), dimension(:) :: a
 real :: temp
@@ -36,5 +36,5 @@ end do
 if (.not. swapped) exit
 end do
 return
-end subroutine bubble_sort
-end program bubble
+end subroutine quick_sort
+end program quick
