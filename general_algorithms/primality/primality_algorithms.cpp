@@ -1,5 +1,4 @@
 /* Grant Williams | Hw1 - Primalilty Algorithms
- * CWID: 11504292
  * Program is capable of determining whether or not a number is prime. 
  * The program makes use of a number of different algorithms and prints to stdout.
  */
