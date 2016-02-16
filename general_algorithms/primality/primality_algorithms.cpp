@@ -1,8 +1,4 @@
-/* Grant Williams | Hw1 - Primalilty Algorithms
- * Program is capable of determining whether or not a number is prime. 
- * The program makes use of a number of different algorithms and prints to stdout.
- */
-
+// Grant Williams Primalilty Algorithms
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -30,7 +26,7 @@
 #define end_t auto end = std::chrono::high_resolution_clock::now();
 
 // get time difference as chrono object
-#define diff_t auto diff = std::chrono::duration_cast< std::chrono::duration<double> > (end-start);
+#define diff_t auto diff = std::chrono::duration_cast<std::chrono::duration<double>> (end-start);
 
 // get time difference as double
 #define sec_t double seconds = diff.count();
@@ -69,14 +65,14 @@ ll mulmod(ll a,ll b,ll c){
 
     while(b > 0){
 
-        if((b&1)){ // b % 2
+        if((b&1) == 1){ // b % 2
             x = (x+y)%c;
         }
 
         y = (y*2)%c;
         b >>= 1; // b /= 2
     }
-    return x % c;
+    return x%c;
 }
 
 
@@ -90,7 +86,7 @@ ll modulo(ll a,ll b,ll c){
     ll x=1,y=a; // ll is taken to avoid overflow of intermediate results
 
     while(b > 0){
-        if((b&1)){ // b%2
+        if((b&1) == 1){ // b%2
             x = mulmod(x,y,c);
         }
 
@@ -98,7 +94,7 @@ ll modulo(ll a,ll b,ll c){
 
         b >>= 1; // b/= 2
     }
-    return x % c;
+    return x%c;
 }
 
 
@@ -173,7 +169,7 @@ void trial_div(std::vector<ll> &primes, bool debug) {
         else if (num == 2) {
             if (debug) {
                 //if we are debugging print the number
-                std::cout << (i + 1) << ": " << primes[i] << " prime\n";
+                std::cout << (i + 1) << ": " << primes[i] << " not prime\n";
             }
             continue; // go to next prime
         }
@@ -184,7 +180,7 @@ void trial_div(std::vector<ll> &primes, bool debug) {
             }
             continue; // go to next prime
         }
-        else if (!(num&1)) { // num % 2 == 0
+        else if ((num & 1) == 0) { //check to see if number is divisible by 2
             if (debug) {
                 //if we are debugging print the number
                 std::cout << (i + 1) << ": " << primes[i] << " not prime\n";
@@ -192,7 +188,7 @@ void trial_div(std::vector<ll> &primes, bool debug) {
             continue; // go to next prime
         }
 
-        else if (num % 3 == 0) { 
+        else if (num % 3 == 0) { //check to see if number is divisible by 3
             if (debug) {
                 //if we are debugging print the number
                 std::cout << (i + 1) << ": " << primes[i] << " not prime\n";
@@ -204,25 +200,26 @@ void trial_div(std::vector<ll> &primes, bool debug) {
             if (num % j == 0 || num % (j + 2) == 0) {
                 if (debug) {
                     //if we are debugging print the number
-                    std::cout << (i + 1) << ": " << primes[i] << " not prime 1\n";
+                    std::cout << (i + 1) << ": " << primes[i] << " not prime\n";
                 }
                 flag = false;
                 break; // breaks loop checking this number
-            } // if statement for divisibility
-        } // trial division for loop
+            }
+        }
 
-        if (debug) {
-            if (flag) {
+        if (flag) {
+            if (debug) {
                 //if we are debugging print the number
                 std::cout << (i + 1) << ": " << primes[i] << " prime\n";
             }
-        }
+
             flag = true; // reset flag back to true
+        }
     } // ends primes to check
 } // ends trial division function
 
 // O( k * log(n)^3 ) in this case k = 12, and the algorithm is deterministic instead of probabilistic
-void miller_rabin(std::vector<ll> &primes, bool debug){
+void miller_rabin(std::vector<ll> &primes, ll high, bool debug){
 
     /*
      * instead of testing random numbers in the algorithm we use a set of preset values as shown in vector arr.
@@ -241,7 +238,48 @@ void miller_rabin(std::vector<ll> &primes, bool debug){
 
     ll num; bool flag = true;
 
-    std::vector<int> arr = {2,3,5,7,11,13,17,19,23,29,31,37}; // numbers to test with mod
+    std::vector<int> arr; // numbers to test with mod
+
+    if (high < 2047){
+     arr = {2};
+    }
+    else if (high < 1373653){
+        arr = {2,3};
+    }
+    else if (high < 9080191){
+        arr = {31,73};
+    }
+
+    else if ( high < 25326001){
+        arr = {2,3,5};
+    }
+
+    else if (high < 3215031751){
+        arr = {2,3,5,7};
+    }
+
+    else if (high < 4759123141){
+        arr = {2,7,61};
+    }
+    else if (high < 1122004669633){
+        arr = {2,13,23,1662803};
+    }
+    else if (high < 2152302898747){
+        arr = {2,3,5,7,11};
+    }
+    else if (high <  3474749660383){
+        arr = {2,3,5,7,11,13,17};
+    }
+    else if (high < 341550071728321){
+        arr = {2,3,5,7,11,13,17};
+    }
+    else if (high <  3825123056546413051){
+        arr = {2,3,5,7,11,13,17,19,23};
+    }
+    else{
+        arr = {2,3,5,7,11,13,17,19,23,29,31,37};
+    }
+
 
     for (int i = 0; i < primes.size(); i++){
         num = primes[i]; // set num as current prime to test
@@ -328,7 +366,7 @@ void test_algorithms(std::vector<bool> algs, ll low, ll high, int num_primes, bo
         }else if(i == 2 && algs[i]){
             std::cout << "Miller-Rabin: " << std::endl;
             start_t
-            miller_rabin(possible_primes,debug);
+            miller_rabin(possible_primes,high, debug);
             end_t
             diff_t
             sec_t
@@ -344,13 +382,15 @@ void test_algorithms(std::vector<bool> algs, ll low, ll high, int num_primes, bo
 int main(){
 
     ll low = 1000000000000000000 - 150000, high = 1000000000000000000; // ranges for our numbers to test
-    int num_primes = 10;
-    bool debug = 1; // used to debug algorithms with printing
+    //ll low = 100000000, high = 1000000000;
+    //ll low = 0, high = 2000;
+    int num_primes = 100;
+    bool debug = 0; // used to debug algorithms with printing
     std::vector<bool> algs;
 
     // change these to set which algorithms to test.
     bool naive_alg =        false;       algs.push_back(naive_alg);
-    bool trial_div_alg =    true;       algs.push_back(trial_div_alg);
+    bool trial_div_alg =    false;       algs.push_back(trial_div_alg);
     bool miller_rabin_alg = true;       algs.push_back(miller_rabin_alg);
 
 
