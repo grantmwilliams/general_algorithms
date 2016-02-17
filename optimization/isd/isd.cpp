@@ -4,20 +4,11 @@
 * Grant Williams
 *
 * Version 1.0.0
-* December 26, 2015
+* Feb 10, 2016
 *
 * Implementation of the incremental steepest descent algorithm
 *
 * To Compile Please use icc -std=c++11 if using intel or g++ -std=c++11 if using GCC.
-*
-*
-*    ______ ____      ____ _____ _____    _____    _____  
-*  .' ___  |_  _|    |_  _|_   _|_   _|  |_   _|  |_   _| 
-* / .'   \_| \ \  /\  / /   | |   | |      | |      | |   
-* | |   ____  \ \/  \/ /    | |   | |   _  | |   _  | |   
-* \ `.___]  |  \  /\  /    _| |_ _| |__/ |_| |__/ |_| |_  
-*  `._____.'    \/  \/    |_____|________|________|_____|                                                        
-*
 *
 *
 *******************************************************************************/
@@ -25,14 +16,14 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include <random>
+#include <chrono>
+#include <future>
 
 
-double get_rand(double HI, double LO){
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::duration<double> secs;
 
-    double r3 = LO + static_cast <double> (rand()) / (RAND_MAX / (HI - LO));
-
-    return r3;
-}
 
 double f1(double x, double y) {
 
@@ -42,66 +33,57 @@ double f1(double x, double y) {
     return (1.5 - x + x * y) * (1.5 - x + x * y) + (2.25 - x + x * y * y) * (2.25 - x + x * y * y) + (2.625 - x + x * y * y * y) * (2.625 - x + x * y * y * y);
 }
 
-double x_partial(double x, double y) {
+double x_partial(double x, double y, double step) {
 
-    double x_prime = (f1(x + 0.000001,y) - f1(x - 0.000001, y)) / 0.000002;
+    double x_prime = (f1(x + step, y) - f1(x - step, y)) / (2 * step);
     return x_prime;
 }
 
-double y_partial(double x, double y) {
+double y_partial(double x, double y, double step) {
 
-    double y_prime = (f1(x, y + 0.000001) - f1(x, y - 0.000001)) / 0.000002;
+    double y_prime = (f1(x, y + step) - f1(x, y - step)) / (2 * step);
     return y_prime;
 }
 
-void seed_rand(){
-    // seed random number
-    srand (static_cast <unsigned> (time(0)));
-}
-
-double isd(){
-    // Declare Variables
-    double tol = 0.0000001; // tolerance for convergence
-    int iter = 0;
-    int max_iter = 100000; // maximum number of iterations
-
+double isd(double tol, int max_iter, double step){
 
     // coefficients for gradient
     double const alpha = 1.1; // expansion
     double const beta = 0.5; // contraction
     double ds = 0.5; // gradient variable
-    double x, y, grad, gradx, grady, coeff;
-    double dx, dy;
-    double last_fit, fit;
+    double x, y, grad, gradx, grady, coeff, dx, dy, last_fit, fit;
 
     // boundaries for variables
     double low = -4.5;
     double high = 4.5;
 
-    // get initial guess
-    double x0 = get_rand(low, high);
-    double y0 = get_rand(low, high);
+    // seed random number generator (is this the thread safe way to do this??)
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_real_distribution<double> unif(low,high);
 
+    // get random initial guesses
+    double x0 = unif(gen);
+    double y0 = unif(gen);
 
     bool constraint = true;
 
     /* begin actual ISD algorithm */
-
-
-
+    /*******************************************************************************/
     last_fit = f1(x0,y0); // get initial fitness
-    fit = last_fit;
+    fit = last_fit; // initialized current fitness
+
+    int iter = 0; // has to be initlized here instead of in for loop because of if statement below for loop.
 
     //begin main loop
-    for (iter = 0; iter < max_iter; iter++){
+    for (; iter < max_iter; iter++){
 
-        gradx = -1 * x_partial(x0, y0);
-        grady = -1 * y_partial(x0, y0);
+        gradx = -1 * x_partial(x0, y0, step);
+        grady = -1 * y_partial(x0, y0, step);
         grad = std::sqrt(gradx * gradx + grady * grady);
 
         if (grad == 0){
-            //std::cout << "grad == 0 \n";
-            return fit;
+            return fit; // if gradient is 0 both derivatives are 0 so we are at a minimum point
         }
 
         coeff = ds / grad; // get cauchy coefficient
@@ -131,7 +113,6 @@ double isd(){
             return fit;
         }
 
-
         // cauchy step was too big
         if (fit > last_fit || !constraint){
 
@@ -147,59 +128,63 @@ double isd(){
 
     }
 
-    if (iter == (max_iter -1)){
+    if (iter == (max_iter - 1)){
         std::cout << "Solution did not converge quickly enough \n";
+        return fit; // returns non minimum value
     }else{
-        //std::cout << "Gen: " << iter << " Min: " << fit << " x: " << x << " y: " << y << "\n";
-        return fit;
+
+        return fit; // return minimum
     }
-
-    return fit; // return our best value i guess
-
 }
 
 
 int main()
 {
-
-    //create seed for random numbers
-    seed_rand();
     const int trials = 10000;
-    std::vector<double> mins;
+
+    // Declare Variables
+    const double tol = 1e-7;    // tolerance for convergence
+    const int max_iter = 1e4;   // maximum number of iterations before quitting without convergence
+    const double step = 1e-7;   // step size for our derivative calculations
+
+    std::vector<std::future<double> > mins; // allows parallel calculation of minimum values using async
+    double temp; // needed to retrieve async values
 
     // for stats printing
-    double best = 100000;
-    double avg;
-    double avg_time;
+    double best = 1e6; // arbitrarily large
+    double avg = 0;
+
 
     // start timing trials
-    std::clock_t start;
-    start = std::clock();
+    auto start = Time::now();
 
     // run all trials
-    for (int i = 0; i < trials; i++){
-        mins.push_back(isd());
+    for (int i = 0; i < trials; i++)
+    {
+        mins.push_back(std::async(isd, tol, max_iter, step));
     }
 
-    // finish timing trials
-    avg_time = ( std::clock() - start) / (double) CLOCKS_PER_SEC;
 
-    // figure stats on our runs
-    for (int j = 0; j < trials; j++){
-        best = best < mins[j] ? best : mins[j];
-        avg += mins[j];
+    // finish timing trials
+    auto end = Time::now();
+    secs avg_time = end - start;
+
+    for (auto &e:mins)
+    {
+        temp = e.get();
+        best = (best < temp) ? best : temp;
+        avg += temp;
     }
 
     avg /= trials;
 
-    std::cout << "The best minimum was: " << best << "\nThe average minimum was: " << avg;
-    std::cout << "\nThe total computation time was: " << avg_time << "\nThe average time was: " << avg_time / trials << "\n\n";
+    std::cout << "Global minimum is: 0\n-----------------------------------------\n";
+    std::cout << "The best minimum found: " << best << "\nThe average minimum was: " << avg;
+    std::cout << "\nThe total computation time was: " << avg_time.count() << "\nThe average time was: " <<
+    (avg_time.count()) / trials << "\n\n";
 
     return 0;
 }
-
-
-
 
 
 
