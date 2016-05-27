@@ -3,10 +3,10 @@
 *
 * Grant Williams
 *
-* Version 1.0.0
-* Feb 10, 2016
+* Version 2.0.0
+* Feb 17, 2016
 *
-* Implementation of the incremental steepest descent algorithm
+* Implementation of the incremental steepest descent algorithm -- Now runs in parallel using asynch.
 *
 * To Compile Please use icc -std=c++11 if using intel or g++ -std=c++11 if using GCC.
 *
@@ -179,7 +179,8 @@ int main()
     avg /= trials;
 
     std::cout << "Global minimum is: 0\n-----------------------------------------\n";
-    std::cout << "The best minimum found: " << best << "\nThe average minimum was: " << avg;
+    std::cout << "The best minimum found: " << best << "\nThe average minimum was: " << avg << "\n";
+    std::cout << "Numer of threads used: " << trials << "\n";
     std::cout << "\nThe total computation time was: " << avg_time.count() << "\nThe average time was: " <<
     (avg_time.count()) / trials << "\n\n";
 
